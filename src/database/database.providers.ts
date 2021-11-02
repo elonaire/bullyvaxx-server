@@ -1,4 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
+import { Content } from 'src/content/content.entity';
+import { File } from 'src/file-upload/file.entity';
 import { SEQUELIZE } from '../constants';
 import { Role, User, UserRole } from '../users/user.entity';
 
@@ -14,7 +16,7 @@ export const databaseProviders = [
         password: process.env.DATABASE_PWD,
         database: process.env.DATABASE,
       });
-      sequelize.addModels([User, Role, UserRole]);
+      sequelize.addModels([User, Role, UserRole, Content, File]);
       await sequelize.sync();
       return sequelize;
     },

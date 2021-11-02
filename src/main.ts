@@ -10,7 +10,7 @@ const customOptions: SwaggerCustomOptions = {
 };
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const config = new DocumentBuilder()
     .setTitle('ACL service')
     .setDescription('ACL microservice that can be consumed as a third-party and integrated into your application, to manage your users, their roles and, their previleges.')
