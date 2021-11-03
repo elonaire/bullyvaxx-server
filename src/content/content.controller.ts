@@ -12,7 +12,7 @@ export class ContentController {
     }
 
     @Get()
-    fetchContent(@Query('tab') tab: string) {
-        return this.contentService.fetchContent(tab);
+    fetchContent(@Query('tab') tab: string, @Query('page') page: string) {
+        return this.contentService.fetchContent(tab, page);
     }
 }
