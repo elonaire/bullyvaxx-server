@@ -10,22 +10,23 @@ export class User extends Model<User> {
   @Column({primaryKey: true})
   user_id: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   first_name: string;
 
+  @AllowNull(true)
   @Column
   middle_name: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   last_name: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   dob: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   phone: string;
 
@@ -34,9 +35,17 @@ export class User extends Model<User> {
   @Column
   email: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   gender: string;
+
+  @AllowNull(false)
+  @Column
+  state: string;
+
+  @AllowNull(false)
+  @Column
+  county: string;
 
   @AllowNull(false)
   @Column
@@ -133,6 +142,12 @@ export class UserDto {
 
   @ApiProperty()
   gender: string;
+
+  @ApiProperty()
+  state: string;
+
+  @ApiProperty()
+  county: string;
 
   @ApiProperty()
   password: string;

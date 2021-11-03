@@ -8,6 +8,10 @@ export class Content extends Model<Content> {
 
   @AllowNull(false)
   @Column
+  page: string;
+
+  @AllowNull(true)
+  @Column
   tab: string;
 
   @AllowNull(false)
@@ -17,6 +21,9 @@ export class Content extends Model<Content> {
 
 export class ContentDto {
   content_id: string;
+
+  @ApiProperty()
+  page: string;
 
   @ApiProperty()
   tab: string;
