@@ -1,4 +1,4 @@
-import { Table, Column, Model, ForeignKey, BelongsToMany, IsEmail, AllowNull } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsToMany, IsEmail, AllowNull, HasMany, BelongsTo } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Table
@@ -9,6 +9,10 @@ export class User extends Model<User> {
 
   @Column({primaryKey: true})
   user_id: string;
+
+  @AllowNull(true)
+  @Column
+  entity_name: string;
 
   @AllowNull(true)
   @Column
@@ -47,18 +51,96 @@ export class User extends Model<User> {
   @Column
   county: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   password: string;
 
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
+}
 
+@Table
+export class School extends Model<School> {
+  @Column({primaryKey: true})
+  school_id: string;
+
+  @AllowNull(false)
+  @Column
+  school_name: string;
+
+  @AllowNull(false)
+  @Column
+  zip_code: string;
+
+  @HasMany(() => Sponsorship)
+  sponsorships: Sponsorship[];
+
+  @HasMany(() => Student)
+  students: Student[];
+}
+
+@Table
+export class Sponsor extends Model<Sponsor> {
+  @ForeignKey(() => Sponsorship)
+  @Column
+  sponsor_id: string;
+
+  @ForeignKey(() => User)
+  @Column
+  user_id: string;
+
+  @AllowNull(true)
+  @Column
+  sponsor_type: string;
+
+  @HasMany(() => Sponsorship)
+  sponsorships: Sponsorship[];
+}
+
+@Table
+export class Sponsorship extends Model<Sponsorship> {
+  @Column({primaryKey: true})
+  sponsorship_id: string;
+
+  @ForeignKey(() => School)
+  @Column
+  school_id: string;
+
+  @ForeignKey(() => Sponsor)
+  @Column
+  sponsor_id: string;
+
+  @AllowNull(false)
+  @Column
+  quantity: string;
+
+  @AllowNull(false)
+  @Column
+  expiry: Date;
+
+  @BelongsTo(() => Sponsor)
+  user: Sponsor;
+
+  @BelongsTo(() => School)
+  school: School;
+}
+
+@Table
+export class Student extends Model<Student> {
+  @ForeignKey(() => School)
+  @Column
+  school_id: string;
+
+  @ForeignKey(() => User)
+  @Column
+  user_id: string;
+
+  @BelongsTo(() => School)
+  school: School;
 }
 
 @Table
 export class Role extends Model<Role> {
-
   @Column({primaryKey: true})
   role_id: string;
 
@@ -150,6 +232,9 @@ export class UserDto {
   county: string;
 
   @ApiProperty()
+  sponsor_type: string;
+
+  @ApiProperty()
   password: string;
 }
 
@@ -196,4 +281,46 @@ export class UserRoleDto {
 export class RoleDto {
   @ApiProperty()
   role: string;
+}
+
+export class SponsorshipDto {
+  @ApiProperty()
+  school_id: string;
+
+  @ApiProperty()
+  user_id: string;
+
+  @ApiProperty()
+  quantity: string;
+
+  @ApiProperty()
+  expiry: Date;
+}
+
+export class StudentDto {
+  
+  @ApiProperty()
+  school_id: string;
+
+  @ApiProperty()
+  user_id: string;
+}
+
+export class SchoolDto {
+  @ApiProperty()
+  school_name: string;
+
+  @ApiProperty()
+  zip_code: string;
+}
+
+export class SponsorDto {
+  @ApiProperty()
+  sponsorship_id: string;
+
+  @ApiProperty()
+  user_id: string;
+
+  @ApiProperty()
+  sponsor_type: string;
 }
