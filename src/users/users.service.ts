@@ -21,6 +21,8 @@ export interface UserInfo {
   password: string;
   phone: string;
   email: string;
+  entity_name?: string;
+  quantity?: string;
 }
 
 @Injectable()
@@ -32,17 +34,24 @@ export class UsersService {
   ) {}
 
   async registerUser(userInfo: UserInfo): Promise<any> {
-    let userExists = null;
+    let userExists: User = null;
     userExists = await this.getSingleUser(
       ['username', 'email'],
       'either',
       userInfo,
     );
-    if (userExists) {
+    if (userExists && !userInfo.quantity) {
       throw new HttpException(
         'User with the same detail(s) already exists.',
         HttpStatus.BAD_REQUEST,
       );
+    } else if(userExists && userInfo.quantity) {
+      delete userExists['password'];
+
+      return {
+        message: 'User is verified, proceed with payment.',
+        user: userExists,
+      };
     }
 
     // generate uuid - user_id
@@ -79,8 +88,11 @@ export class UsersService {
         });
       }
 
+      delete user['password'];
+
       return {
         message: 'User created successfully',
+        user
       };
     }
   }
