@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import {
   SCHOOLS_REPOSITORY,
   SPONSORSHIPS_REPOSITORY,
@@ -35,6 +35,12 @@ export class AppService {
     form: any;
   }): Promise<SponsorshipDto[]> {
     console.log('userInfo', sponsorship.userInfo);
+    if (!sponsorship?.form) {
+      throw new HttpException(
+        'Invalid form',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     
     return await Promise.all(
       (sponsorship?.form?.schoolsArray as any[]).map(async school => {
