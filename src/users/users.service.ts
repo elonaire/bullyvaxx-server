@@ -23,6 +23,7 @@ export interface UserInfo {
   email: string;
   entity_name?: string;
   quantity?: string;
+  user?: any;
 }
 
 @Injectable()
@@ -68,7 +69,11 @@ export class UsersService {
       );
     }
 
-    userInfo.password = await bcrypt.hash(userInfo.password, 10);
+    if (userInfo.password) {
+      userInfo.password = await bcrypt.hash(userInfo.password, 10);
+    } else {
+      userInfo.password = await bcrypt.hash('dfdtgt567y', 10);
+    }
     const userRole = new UserRole({
       role_id: roleFound.role_id,
       user_id: userInfo.user_id,

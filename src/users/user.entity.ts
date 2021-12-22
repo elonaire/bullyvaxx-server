@@ -81,20 +81,19 @@ export class School extends Model<School> {
 
 @Table
 export class Sponsor extends Model<Sponsor> {
-  @ForeignKey(() => Sponsorship)
-  @Column
+  @Column({primaryKey: true})
   sponsor_id: string;
 
-  @ForeignKey(() => User)
-  @Column
-  user_id: string;
+  // @ForeignKey(() => User)
+  // @Column
+  // user_id: string;
 
-  @AllowNull(true)
-  @Column
-  sponsor_type: string;
+  // @ForeignKey(() => Sponsorship)
+  // @Column
+  // sponsorship_id: string;
 
-  @HasMany(() => Sponsorship)
-  sponsorships: Sponsorship[];
+  // @HasMany(() => Sponsorship)
+  // sponsorships: Sponsorship[];
 }
 
 @Table
@@ -106,9 +105,9 @@ export class Sponsorship extends Model<Sponsorship> {
   @Column
   school_id: string;
 
-  @ForeignKey(() => Sponsor)
+  @ForeignKey(() => User)
   @Column
-  sponsor_id: string;
+  user_id: string;
 
   @AllowNull(false)
   @Column
@@ -116,10 +115,10 @@ export class Sponsorship extends Model<Sponsorship> {
 
   @AllowNull(false)
   @Column
-  expiry: Date;
+  expiry: string;
 
-  @BelongsTo(() => Sponsor)
-  user: Sponsor;
+  @BelongsTo(() => User)
+  user: User;
 
   @BelongsTo(() => School)
   school: School;
@@ -284,6 +283,8 @@ export class RoleDto {
 }
 
 export class SponsorshipDto {
+  sponsorship_id: string;
+
   @ApiProperty()
   school_id: string;
 
@@ -294,7 +295,7 @@ export class SponsorshipDto {
   quantity: string;
 
   @ApiProperty()
-  expiry: Date;
+  expiry: string;
 }
 
 export class StudentDto {
@@ -307,6 +308,8 @@ export class StudentDto {
 }
 
 export class SchoolDto {
+  school_id: string;
+
   @ApiProperty()
   school_name: string;
 

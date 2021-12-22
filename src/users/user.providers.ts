@@ -1,5 +1,5 @@
-import { USERS_REPOSITORY, ROLES_REPOSITORY, USER_ROLES_REPOSITORY } from '../constants';
-import { Role, User, UserRole } from './user.entity';
+import { USERS_REPOSITORY, ROLES_REPOSITORY, USER_ROLES_REPOSITORY, SPONSORSHIPS_REPOSITORY, SCHOOLS_REPOSITORY, STUDENTS_REPOSITORY } from '../constants';
+import { Role, School, Sponsorship, Student, User, UserRole } from './user.entity';
 
 export const usersProviders = [
   {
@@ -13,5 +13,17 @@ export const usersProviders = [
   {
     provide: USER_ROLES_REPOSITORY,
     useValue: UserRole,
+  },
+  {
+    provide: SPONSORSHIPS_REPOSITORY,
+    useValue: Sponsorship,
+  },
+  {
+    provide: SCHOOLS_REPOSITORY,
+    useValue: School,
+  },
+  {
+    provide: STUDENTS_REPOSITORY,
+    useValue: Student,
   },
 ];
