@@ -26,8 +26,17 @@ export class AppService {
     };
   }
 
-  async getSponsorships(): Promise<SponsorshipDto[]> {
-    return await this.sponsorshipsRepository.findAll<Sponsorship>();
+  async getSponsorships(): Promise<Sponsorship[]> {
+    let allSponsorships: Sponsorship[] = await this.sponsorshipsRepository.findAll<Sponsorship>();
+    return await Promise.all(allSponsorships.map(async sponsorship => {
+      let sponsorshipSchema: Sponsorship = await this.sponsorshipsRepository.findOne<Sponsorship>({where: {sponsorship_id: sponsorship?.sponsorship_id}});
+      let user = await sponsorshipSchema.$get('user');
+      let school = await sponsorshipSchema.$get('school');
+      sponsorship['dataValues']['sponsor_name'] = `${user?.dataValues?.first_name} ${user?.dataValues?.last_name}` || user?.dataValues?.entity_name;
+      sponsorship['dataValues']['school_name'] = school?.dataValues?.school_name;
+      
+      return sponsorship;
+    }))
   }
 
   async createSponsorship(sponsorship: {

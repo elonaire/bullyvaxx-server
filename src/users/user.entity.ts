@@ -43,11 +43,11 @@ export class User extends Model<User> {
   @Column
   gender: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   state: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column
   county: string;
 
