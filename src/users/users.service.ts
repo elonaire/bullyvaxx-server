@@ -35,12 +35,20 @@ export class UsersService {
   ) {}
 
   async registerUser(userInfo: UserInfo): Promise<any> {
+    if (!userInfo?.email) {
+      throw new HttpException(
+        'Invalid user details',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     let userExists: User = null;
     userExists = await this.getSingleUser(
       ['username', 'email'],
       'either',
       userInfo,
     );
+    
     if (userExists && !userInfo.quantity) {
       throw new HttpException(
         'User with the same detail(s) already exists.',
