@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { LoginDetails } from './app.entity';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/auth.guard';
@@ -20,6 +21,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Authorization')
   @Get('auth/confirm')
   confirmAuth(): any {
     return {
@@ -28,8 +30,9 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Authorization')
   @Get('sponsorships')
-  getSponsorships(): SponsorshipDto[] {
+  getSponsorships(): Promise<SponsorshipDto[]> {
     return this.appService.getSponsorships();
   }
 

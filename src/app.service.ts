@@ -26,8 +26,8 @@ export class AppService {
     };
   }
 
-  getSponsorships(): SponsorshipDto[] {
-    return this.sponsorshipsRepository.findAll<Sponsorship>();
+  async getSponsorships(): Promise<SponsorshipDto[]> {
+    return await this.sponsorshipsRepository.findAll<Sponsorship>();
   }
 
   async createSponsorship(sponsorship: {
