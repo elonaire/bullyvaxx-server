@@ -36,7 +36,7 @@ export class FileUploadController {
   @UseInterceptors(
     AnyFilesInterceptor({
       limits: {
-        fileSize: 5000000,
+        fileSize: 15000000,
       },
     }),
   )
