@@ -26,17 +26,23 @@ export class AppService {
     };
   }
 
-  async getSponsorships(): Promise<Sponsorship[]> {
+  async getSponsorships(zip_name?: string): Promise<Sponsorship[]> {
     let allSponsorships: Sponsorship[] = await this.sponsorshipsRepository.findAll<Sponsorship>();
-    return await Promise.all(allSponsorships.map(async sponsorship => {
+    let foundSponsorships = await Promise.all(allSponsorships.map(async sponsorship => {
       let sponsorshipSchema: Sponsorship = await this.sponsorshipsRepository.findOne<Sponsorship>({where: {sponsorship_id: sponsorship?.sponsorship_id}});
       let user = await sponsorshipSchema.$get('user');
       let school = await sponsorshipSchema.$get('school');
       sponsorship['dataValues']['sponsor_name'] = `${user?.dataValues?.first_name} ${user?.dataValues?.last_name}` || user?.dataValues?.entity_name;
       sponsorship['dataValues']['school_name'] = school?.dataValues?.school_name;
+
+      if (zip_name && !zip_name.includes(school?.dataValues?.school_name) && !zip_name.includes(school?.dataValues?.zip_code)) {
+        return null;
+      }
       
       return sponsorship;
     }))
+
+    return foundSponsorships.filter(sponsorship => sponsorship);
   }
 
   async createSponsorship(sponsorship: {

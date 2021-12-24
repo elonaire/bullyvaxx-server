@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { LoginDetails } from './app.entity';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/auth.guard';
@@ -29,11 +29,12 @@ export class AppController {
     }
   }
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('Authorization')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiBearerAuth('Authorization')
   @Get('sponsorships')
-  getSponsorships(): Promise<SponsorshipDto[]> {
-    return this.appService.getSponsorships();
+  @ApiQuery({ name: 'zip_name', required: false})
+  getSponsorships(@Query('zip_name') zip_name?: string): Promise<SponsorshipDto[]> {
+    return this.appService.getSponsorships(zip_name);
   }
 
   @Post('sponsorships')
