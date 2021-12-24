@@ -24,6 +24,7 @@ export interface FileInfo {
   filename: string;
   path: string;
   size: number;
+  user_id?: string;
 }
 
 @Controller('file-upload')
