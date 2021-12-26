@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AllowNull, Column, Model, Table } from 'sequelize-typescript';
+import { AllowNull, Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table
 export class Content extends Model<Content> {
@@ -15,7 +15,7 @@ export class Content extends Model<Content> {
   tab: string;
 
   @AllowNull(false)
-  @Column
+  @Column(DataType.TEXT)
   content: string;
 }
 
